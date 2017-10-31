@@ -26,7 +26,7 @@ import **AppMaterialModule** in your TestBed<br>
     });
  #### If module uses Router
  ##### forRoot()
- You need *RouterModule, [routes]()* and *APP_BASE_HREF*<br>
+ You need *RouterModule, [routes](./app-routes.md)* and *APP_BASE_HREF*<br>
  as well as any Module that will be instantly loaded (*HomeModule* in this example)  
   
     
