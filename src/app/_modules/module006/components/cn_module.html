@@ -1,0 +1,89 @@
+<h2>006 @ViewChild and ngAfterViewInit</h2>
+<mat-grid-list cols="2">
+
+  <mat-grid-tile>
+    <mat-grid-tile-header>HTML</mat-grid-tile-header>
+
+          <auth-form
+            (submitted)="createUser($event)">
+            <h3>Create Account</h3>
+            <button type="submit">Join us</button>
+          </auth-form>
+
+          <auth-form
+            (submitted)="loginUser($event)">
+            <h3>Login</h3>
+            <auth-remember (checked)="rememberUser($event)"></auth-remember>
+            <auth-remember (checked)="rememberUser($event)"></auth-remember>
+            <auth-remember (checked)="rememberUser($event)"></auth-remember>
+            <button type="submit">Login</button>
+          </auth-form>
+
+  </mat-grid-tile>
+
+  <mat-grid-tile>
+    <mat-grid-tile-header>Whats going on?</mat-grid-tile-header>
+    <div>
+      <ul>
+        <li>New <code>&lt;auth-message&gt;</code> component which has a property <code>days = 7;</code><br>
+          We will amend <code>days</code> to 15 when the component is projected into <code>&lt;auth-form&gt;</code>
+        </li>
+        <li>
+          In <i>AuthFormComponent</i> do:
+          <ul>
+            <li><code>import &#123; ViewChild, AfterViewInit &#125; from @angular/core;</code></li>
+            <li>import <i>AuthMessageComponent</i> in order to look it up</li>
+            <li>
+              define message:<br>
+              <code><b>@ViewChild</b>(AuthMessageComponent) message: AuthRememberComponent;</code>
+            </li>
+            <li>in <i>ngAfterInit</i> do (forEach comes from the <i>QueryList</i> prototype):<br>
+              <code>
+                if (this.remember) &#123;<br>
+                &nbsp;&nbsp;this.remember.<b>forEach</b>( item => &#123;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;item.checked.subscribe( checked => this.showMessage = checked );<br>
+                &nbsp;&nbsp;&#125;);<br>
+                &#125;<br>
+              </code>
+            </li>
+          </ul>
+        </li>
+        <br>
+        <strong>The rest of the module stays unchanged:</strong>
+        <li>Projecting the component is straight forward, this is about binding to them.<br>
+          <code>
+            &lt;auth-form (submitted)="loginUser($event)"&gt;<br>
+              &nbsp;&nbsp;&lt;h3&gt;Login&lt;/h3&gt;<br>
+              &nbsp;&nbsp;&lt;auth-remember (checked)="rememberUser($event)"&gt;&lt;auth-remember&gt;<br>
+              &nbsp;&nbsp;&lt;button type="submit"&gt;Join us&lt;/button&gt;<br>
+            &lt;/auth-form&gt;<br>
+          </code>
+        </li>
+        <li>
+          <i>rememberUser</i> keeps an internal  flag updated <code>this.rememberMe = remember;</code><br>
+          which will be submitted together with the login data.
+        </li>
+        <li><i>AuthRemeberComponent</i> emits the <i>checked</i> event to be used in the <i>AuthFormComponent</i><br>
+          <code>
+            @Component(&#123;<br>
+            &nbsp;&nbsp;selector: 'auth-remember',<br>
+            &nbsp;&nbsp;template: `<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;label&gt;<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;input type="checkbox" (change)="onChange($event.target.checked)"/&gt;<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Keep me logged in<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;/label&gt;<br>
+            &nbsp;&nbsp;`<br>
+            &#125;)<br>
+            export class AuthRememberComponent &#123;<br>
+            &nbsp;&nbsp;&#64;Output() checked = new EventEmitter&lt;boolean&gt;();<br>
+            &nbsp;&nbsp;onChange(value: boolean) &#123;<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;this.checked.emit(value);<br>
+            &nbsp;&nbsp;&#125;<br>
+            &#125;<br>
+          </code>
+        </li>
+      </ul>
+    </div>
+  </mat-grid-tile>
+
+</mat-grid-list>

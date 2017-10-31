@@ -1,0 +1,81 @@
+<h2>003 Projecting and Binding to Components</h2>
+<mat-grid-list cols="2">
+  <mat-grid-tile>
+    <mat-grid-tile-header>HTML</mat-grid-tile-header>
+
+    <div>
+
+          <auth-form
+            (submitted)="createUser($event)">
+            <h3>Create Account</h3>
+            <button type="submit">Join us</button>
+          </auth-form>
+
+          <auth-form
+            (submitted)="loginUser($event)">
+            <h3>Login</h3>
+            <auth-remember (checked)="rememberUser($event)"></auth-remember>
+            <button type="submit">Login</button>
+          </auth-form>
+
+    </div>
+  </mat-grid-tile>
+
+  <mat-grid-tile>
+    <mat-grid-tile-header>Whats going on?</mat-grid-tile-header>
+    <ul>
+      <br><br><br>
+      <li>
+        ModuleComponent calls <i>&lt;auth-form&gt;</i> twice
+        <ul>
+          <li>the Create Account form is unchanged</li>
+          <li>into the Login form is <i>AuthRememberComponent</i> projected (keep me logged in)</li>
+        </ul>
+        Projecting the component is straight forward, this is about binding to them.
+
+<pre><code>
+    &lt;auth-form (submitted)="createUser($event)"&gt;
+      &lt;h3&gt;Create Account&lt;h3&gt;
+      &lt;button type="submit"&gt;Join us&lt;/button&gt;
+    &lt;/auth-form&gt;
+
+    &lt;auth-form (submitted)="loginUser($event)"&gt;
+      &lt;h3&gt;Login&lt;/h3&gt;
+      <b>&lt;auth-remember (checked)="rememberUser($event)"&gt;&lt;auth-remember&gt;</b>
+      &lt;button type="submit"&gt;Join us&lt;/button&gt;
+    &lt;/auth-form&gt;
+</code></pre>
+
+      </li>
+      <li>
+        <i>rememberUser</i> keeps an internal  flag updated <code>this.rememberMe = remember;</code><br>
+        which will be submitted together with the login data.
+      </li>
+      <li>
+        <span class="title">
+          <i>AuthRemeberComponent</i> emits the 'checked' event to be used in the <i>AuthFormComponent</i>
+        </span>
+        <span class="code">
+          <pre><code>
+    &#64;Component(&#123;
+      selector: 'auth-remember',
+      template: `
+        &lt;label&gt;
+          &lt;input type="checkbox" (change)="onChange($event.target.checked)"/&gt;
+          Keep me logged in
+        &lt;/label&gt;
+      `
+    &#125;)
+    export class AuthRememberComponent &#123;
+      &#64;Output() checked = new EventEmitter&lt;boolean&gt;();
+      onChange(value: boolean) &#123;
+        <b>this.checked.emit(value);</b>
+      &#125;
+    &#125;
+          </code></pre>
+        </span>
+      </li>
+    </ul>
+  </mat-grid-tile>
+
+</mat-grid-list>

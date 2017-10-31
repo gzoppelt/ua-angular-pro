@@ -1,0 +1,84 @@
+<h2>004 &#64;ContentChild and ngAfterContentInit</h2>
+<mat-grid-list cols="2">
+  <mat-grid-tile>
+    <mat-grid-tile-header>HTML</mat-grid-tile-header>
+
+    <div>
+
+          <auth-form
+            (submitted)="createUser($event)">
+            <h3>Create Account</h3>
+            <button type="submit">Join us</button>
+          </auth-form>
+
+          <auth-form
+            (submitted)="loginUser($event)">
+            <h3>Login</h3>
+            <auth-remember (checked)="rememberUser($event)"></auth-remember>
+            <button type="submit">Login</button>
+          </auth-form>
+
+    </div>
+  </mat-grid-tile>
+
+  <mat-grid-tile>
+    <mat-grid-tile-header>Whats going on?</mat-grid-tile-header>
+    <ul>
+      <br><br><br><br><br><br><br>
+      <li>
+        In <i>AuthFormComponent</i> do:
+        <ul>
+          <li>import <i>ContentChild, AfterContentInit</i> from @angular/core</li>
+          <li>import <i>AuthRememberComponent</i> in order to look it up</li>
+          <li>
+            define remember:<br>
+            <code>@ContentChild(AuthRememberComponent) remember: AuthRememberComponent;</code>
+          </li>
+          <li>in <i>ngAfterInit</i> do:<br>
+            <code>
+              if (this.remember) &#123;<br>
+                &nbsp;&nbsp;<b>this.remember.checked.subscribe( checked => this.showMessage = checked );</b><br>
+              &#125;
+            </code>
+          </li>
+        </ul>
+      </li>
+      <br>
+      <li>Projecting the component is straight forward, this is about binding to them.<br>
+        <code>
+          &lt;auth-form (submitted)="loginUser($event)"&gt;<br>
+            &nbsp;&nbsp;&lt;h3&gt;Login&lt;/h3&gt;<br>
+            &nbsp;&nbsp;<b>&lt;auth-remember (checked)="rememberUser($event)"&gt;&lt;auth-remember&gt;</b><br>
+            &nbsp;&nbsp;&lt;button type="submit"&gt;Join us&lt;/button&gt;<br>
+          &lt;/auth-form&gt;<br>
+        </code>
+      </li>
+      <br>
+      <li>
+        <i>rememberUser</i> keeps an internal  flag updated <code>this.rememberMe = remember;</code><br>
+        which will be submitted together with the login data.
+      </li>
+      <br>
+      <li><i>AuthRemeberComponent</i> emits the <i>checked</i> event to be used in the <i>AuthFormComponent</i><br>
+        <code>
+          @Component(&#123;<br>
+          &nbsp;&nbsp;selector: 'auth-remember',<br>
+          &nbsp;&nbsp;template: `<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&lt;label&gt;<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;input type="checkbox" <b>(change)="onChange($event.target.checked)"</b>/&gt;<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Keep me logged in<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&lt;/label&gt;<br>
+          &nbsp;&nbsp;`<br>
+          &#125;)<br>
+          export class AuthRememberComponent &#123;<br>
+          &nbsp;&nbsp;&#64;Output() checked = new EventEmitter&lt;boolean&gt;();<br>
+          &nbsp;&nbsp;onChange(value: boolean) &#123;<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;<b>this.checked.emit(value);</b><br>
+          &nbsp;&nbsp;&#125;<br>
+          &#125;<br>
+        </code>
+      </li>
+    </ul>
+  </mat-grid-tile>
+
+</mat-grid-list>

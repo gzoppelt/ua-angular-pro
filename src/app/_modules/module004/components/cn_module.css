@@ -1,0 +1,9 @@
+code {
+    color: blue;
+}
+b {
+    color: darkblue;
+}
+mat-grid-tile {
+    overflow: auto;
+}

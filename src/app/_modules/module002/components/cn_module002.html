@@ -1,0 +1,73 @@
+<h2>002 Using &lt;ng-content&gt; with Projection Slots</h2>
+<mat-grid-list cols="2">
+  <mat-grid-tile>
+    <mat-grid-tile-header>HTML</mat-grid-tile-header>
+
+    <div>
+
+          <auth-form
+            (submitted)="createUser($event)">
+            <h3>Create Account</h3>
+            <button type="submit">Join us</button>
+          </auth-form>
+
+          <auth-form
+            (submitted)="loginUser($event)">
+            <h3>Login</h3>
+            <button type="submit">Login</button>
+          </auth-form>
+
+    </div>
+  </mat-grid-tile>
+
+  <mat-grid-tile>
+    <mat-grid-tile-header>Whats going on?</mat-grid-tile-header>
+    <ul>
+      <li>
+        <span class="title">
+          Module002Component calls <i>&lt;auth-form&gt;</i> twice
+          <ul>
+            <li>once with title <i>Create Account</i> and button <i>Join us</i></li>
+            <li>once with title <i>Login</i> and button <i>Login</i></li>
+          </ul>
+          Now is not just the title different, also there are different submit buttons.
+        </span>
+        <span class="code">
+          <pre><code>
+    &lt;auth-form (submitted)="createUser($event)"&gt;
+      &lt;h3&gt;Create Account&lt;h3&gt;
+      <b>&lt;button type="submit"&gt;Join us&lt;/button&gt;</b>
+    &lt;/auth-form&gt;
+
+    &lt;auth-form (submitted)="loginUser($event)"&gt;
+      &lt;h3&gt;Login&lt;/h3&gt;
+      <b>&lt;button type="submit"&gt;Join us&lt;/button&gt;</b>
+    &lt;/auth-form&gt;
+          </code></pre>
+        </span>
+      </li>
+      <li>
+        <span class="title">
+          In order to know where to place the projected content inside the form,<br>
+          the form does not need just a <i>&lt;ng-content&gt;&lt;/ng-content&gt;</i> placeholder.<br>
+          We need to know which content goes where.<br>
+          This is done by the <i>select</i> attribute of the <i>&lt;ng-content&gt;&lt;/ng-content&gt;</i> placeholder.
+        </span>
+        <span class="code">
+          <pre><code>
+    &lt;form (ngSubmit)="onSubmit(form.value)" #form="ngForm"&gt;
+      &lt;ng-content <b>select="h3"</b>&gt;&lt;/ng-content&gt;
+      &lt;label&gt;Email address&lt;input type="email" name="email" ngModel&gt;&lt;/label&gt;
+
+      &lt;label&gt;Password&lt;input type="password" name="password" ngModel&gt;&lt;/label&gt;
+
+      &lt;ng-content <b>select="button"</b>&gt;&lt;/ng-content&gt;
+    &lt;/form&gt;
+          </code></pre>
+        </span>
+      </li>
+      <li>This <i>select</i> works like any CSS selector, you can select "element", ".class", or "#id".</li>
+    </ul>
+  </mat-grid-tile>
+
+</mat-grid-list>
