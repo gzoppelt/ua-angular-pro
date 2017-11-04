@@ -1,0 +1,97 @@
+&nbsp;< <a routerLink="/m006">prev</a> <b>|</b> <a routerLink="/home">Home</a> <b>|</b> <a routerLink="/m008">next</a> >
+<h2>007 @ViewChildren and QueryLists</h2>
+<mat-grid-list cols="2">
+
+  <mat-grid-tile>
+    <mat-grid-tile-header>HTML</mat-grid-tile-header>
+
+          <auth-form
+            (submitted)="createUser($event)">
+            <h3>Create Account</h3>
+            <button type="submit">Join us</button>
+          </auth-form>
+
+          <auth-form
+            (submitted)="loginUser($event)">
+            <h3>Login</h3>
+            <auth-remember (checked)="rememberUser($event)"></auth-remember>
+            <auth-remember (checked)="rememberUser($event)"></auth-remember>
+            <auth-remember (checked)="rememberUser($event)"></auth-remember>
+            <button type="submit">Login</button>
+          </auth-form>
+
+  </mat-grid-tile>
+
+  <mat-grid-tile>
+    <mat-grid-tile-header>Whats going on?</mat-grid-tile-header>
+    <div>
+      <ul>
+        <li>Now we have 3 times component <code>&lt;auth-message&gt;</code> which has a property <code>days = 7;</code><br>
+          We amend <code>days</code> to 15 when the component is projected into <code>&lt;auth-form&gt;</code>
+        </li>
+        <li>
+          In <i>AuthFormComponent</i> do:
+          <ul>
+            <li><code>import &#123; <br>
+              &nbsp;&nbsp;ViewChildren, AfterContentInit, AfterViewInit, QueryList, ChangeDetectorRef <br>
+              &#125; from @angular/core;</code>
+            </li>
+            <li>import all <i>AuthMessageComponent</i>s in order to look them up</li>
+            <li>
+              define messages:<br>
+              <code><b>@ViewChildren</b>(AuthMessageComponent) messages: QueryList&lt;AuthRememberComponent&gt;</code>
+            </li>
+
+            <li>try in <b><i>ngAfterContentInit</i></b> do:<br>
+              <code>
+                if (this.messages) &#123;<br>
+                &nbsp;&nbsp;this.messages.forEach( msg => msg = 15 );<br>
+                &#125;<br>
+              </code>
+              <span class="red"><small>Nothing happens - No error - No changes of content.</small></span><br>
+              ViewChildren's QueryLists are only processed in <i>AfterViewInit</i>!
+            </li>
+
+            <li>in <b><i>ngAfterViewInit</i></b> do:<br>
+              <code>
+                if (this.messages) &#123;<br>
+                &nbsp;&nbsp;this.messages.forEach( msg => msg = 15 );<br>
+                &#125;<br>
+              </code>
+              We get the expected Error:<br>
+              <span class="red"><small>
+                Expression has changed after it was checked. Previous value: '7'. Current value: '15'.<br>
+              </small></span>
+              but
+              <ul>
+                <li>this error occurs only in Development Mode</li>
+                <li>the required changes have been applied</li>
+                <li>
+                  there is a workaround with <b>timeout()</b> in ngAfterViewInit<br>
+                  <code>
+                    if (this.messages) &#123;<br>
+                      &nbsp;&nbsp;setTimeout( () => this.messages.forEach( msg => msg = 15 ) );<br>
+                    &#125;<br>
+                  </code>
+                </li>
+                <li>
+                  there is a work around with <b>ChangeDetectionRef</b> in ngAfterViewInit<br>
+                  <code>
+                    constructor(private: changeDetectorRef: ChangeDetectorRef) &#123;&#125;<br>
+                    <strong>...</strong><br>
+                    if (this.messages) &#123;<br>
+                    &nbsp;&nbsp;setTimeout( () => this.messages.forEach( msg => msg = 15 ) );<br>
+                    &nbsp;&nbsp;this.changeDetectorRef.detectChanges();<br>
+                    &#125;<br>
+                  </code>
+                </li>
+              </ul>
+
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </mat-grid-tile>
+
+</mat-grid-list>

@@ -1,0 +1,55 @@
+&nbsp;< <a routerLink="/m012">prev</a> <b>|</b> <a routerLink="/home">Home</a> <b>|</b> <a routerLink="/m014">next</a> >
+<h2>013 Dynamic component @Output subscriptions</h2>
+<mat-grid-list cols="2">
+
+  <mat-grid-tile>
+    <mat-grid-tile-header>HTML</mat-grid-tile-header>
+
+          <div #entry></div>
+
+  </mat-grid-tile>
+
+  <mat-grid-tile>
+    <mat-grid-tile-header>Whats going on?</mat-grid-tile-header>
+    <div>
+      <ul>
+        <li>No <i>@Output()</i> needed, just subscribe the submitted event in <i>ngAfterContentInit</i></li>
+        <li><i>ModuleComponent</i> which is producing <i>AuthFormComponent</i>s looks like this:<br>
+          <code>
+            import &#123; <br>
+            &nbsp;&nbsp;Component, ViewChild, ViewContainerRef, ComponentFactoryResolver, AfterContentInit <br>
+            &#125; from '@angular/core';<br>
+            import &#123; AuthFormComponent &#125; from '../_modules/auth-form/components/cn_auth-form.component';<br>
+            import &#123; User &#125; from '../_modules/auth-form/components/md_user';<br>
+            @Component(&#123;<br>
+            &nbsp;&nbsp;selector: 'app-module',<br>
+            &nbsp;&nbsp;templateUrl: './cn_module.html',<br>
+            &nbsp;&nbsp;styleUrls: ['./cn_module.css']<br>
+            &#125;)<br>
+            export class ModuleComponent implements AfterContentInit &#123;<br>
+            &nbsp;&nbsp;@ViewChild('entry', &#123; read: ViewContainerRef &#125;) entry: ViewContainerRef;<br>
+            &nbsp;&nbsp;constructor(private componentFactoryResolver: ComponentFactoryResolver) &#123;&#125;<br>
+            &nbsp;&nbsp;ngAfterContentInit() &#123;<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;const authFormFactory = <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;this.componentFactoryResolver.resolveComponentFactory(AuthFormComponent);<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;const componentA  = this.entry.createComponent(authFormFactory);<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;const componentB = this.entry.createComponent(authFormFactory);<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;componentA.instance.title = 'Create Account';<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;<b>componentA.instance.submitted.subscribe(this.loginUser);</b><br>
+            &nbsp;&nbsp;&#125;<br>
+            &nbsp;&nbsp;loginUser(user: User) &#123;<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;console.log('Login', user);<br>
+            &nbsp;&nbsp;&#125;<br>
+            &#125;
+          </code>
+        </li>
+        <li>
+          in <i>ModuleModule</i> have the dynamically created components to be declared as <i>entryComponents</i><br>
+          next to <i>declarations</i> and <i>imports</i><br>
+          <code>entryComponents: [ AuthFormComponent ]</code>
+        </li>
+      </ul>
+    </div>
+  </mat-grid-tile>
+
+</mat-grid-list>

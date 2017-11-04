@@ -1,3 +1,4 @@
+&nbsp;< <a routerLink="/m004">prev</a> <b>|</b> <a routerLink="/home">Home</a> <b>|</b> <a routerLink="/m006">next</a> >
 <h2>005 @ContentChildren and QueryLists</h2>
 <mat-grid-list cols="2">
 
@@ -35,7 +36,7 @@
               define remember:<br>
               <code><b>@ContentChildren</b>(AuthRememberComponent) remember: <b>QueryList</b>&lt;AuthRememberComponent&gt;;</code>
             </li>
-            <li>in <i>ngAfterInit</i> do (forEach comes from the <i>QueryList</i> prototype):<br>
+            <li>in <b><i>ngAfterContentInit</i></b> do (forEach comes from the <i>QueryList</i> prototype):<br>
               <code>
                 if (this.remember) &#123;<br>
                 &nbsp;&nbsp;this.remember.<b>forEach</b>( item => &#123;<br>
@@ -61,7 +62,7 @@
           <i>rememberUser</i> keeps an internal  flag updated <code>this.rememberMe = remember;</code><br>
           which will be submitted together with the login data.
         </li>
-        <li><i>AuthRemeberComponent</i> emits the <i>checked</i> event to be used in the <i>AuthFormComponent</i><br>
+        <li><i>AuthRememberComponent</i> emits the <i>checked</i> event to be used in the <i>AuthFormComponent</i><br>
           <code>
             @Component(&#123;<br>
             &nbsp;&nbsp;selector: 'auth-remember',<br>

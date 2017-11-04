@@ -6,7 +6,6 @@ import {
 import { AuthRememberComponent } from './co_auth-remember.component';
 import { AuthMessageComponent } from './co_auth-message.component';
 
-
 import { User } from './md_user';
 
 @Component({
@@ -71,8 +70,10 @@ export class AuthFormComponent implements AfterContentInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    // belongs into ngAfterContentInit as Angular does not allow content change after view is initialized
-    // this.message.days = 15;
+    if (this.message) {
+      // belongs into ngAfterContentInit as Angular does not allow content change after view is initialized
+      // this.message.days = 15;
+    }
   }
 
   onSubmit(value: User) {

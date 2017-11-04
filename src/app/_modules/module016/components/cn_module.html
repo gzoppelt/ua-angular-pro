@@ -1,0 +1,57 @@
+&nbsp;< <a routerLink="/m015">prev</a> <b>|</b> <a routerLink="/home">Home</a> <b>|</b> <a routerLink="/m017">next</a> >
+<h2>016 Dynamic template rendering with EmbeddedViewRef</h2>
+<mat-grid-list cols="2">
+
+  <mat-grid-tile>
+    <mat-grid-tile-header>HTML</mat-grid-tile-header>
+
+      <button *ngIf="show" (click)="moveComponent()">Move</button><br>
+      <button *ngIf="show" (click)="destroyComponent()">Destroy</button>
+
+      <div #entry></div>
+      <ng-template #tmpl>
+        Todd Motto : England, UK
+      </ng-template>
+
+  </mat-grid-tile>
+
+  <mat-grid-tile>
+    <mat-grid-tile-header>Whats going on?</mat-grid-tile-header>
+    <div>
+      <ul>
+        <li><code>import &#123; ..., TemplateRef, EmbeddedViewRef, ... &#125;</code></li>
+        <li><code>
+          &lt;div #entry&gt;&lt;/div&gt;<br>
+          &lt;ng-template #tmpl&gt;Todd Motto : England, UK&lt;/ng-template&gt;
+        </code></li>
+        <li><i>ModuleComponent</i> which is producing <i>AuthFormComponent</i>s looks like this:<br>
+          <code>
+            export class ModuleComponent implements AfterContentInit &#123;<br>
+            &nbsp;&nbsp;componentA: ComponentRef&lt;AuthFormComponent&gt;<br>
+            &nbsp;&nbsp;componentB: <b>EmbeddedViewRef</b>&lt;any&gt;<br>
+            &nbsp;&nbsp;show = true;<br>
+            &nbsp;&nbsp;index = 0;<br>
+            &nbsp;&nbsp;@ViewChild('entry', &#123; read: ViewContainerRef &#125;) entry: ViewContainerRef;<br>
+            &nbsp;&nbsp;@ViewChild('tmpl') tmpl: <b>TemplateRef</b>&lt;any&gt;<br>
+            &nbsp;&nbsp;constructor(private componentFactoryResolver: ComponentFactoryResolver) &#123;&#125;<br>
+            &nbsp;&nbsp;ngAfterContentInit() &#123;<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;const authFormFactory = <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;this.componentFactoryResolver.resolveComponentFactory(AuthFormComponent);<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;this.componentA  = this.entry.createComponent(authFormFactory);<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;this.componentA.instance.title = 'Create Account';<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;this.componentA.instance.submitted.subscribe(this.loginUser);<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;this.componentB = this.entry.<b>createEmbeddedView</b>(this.tmpl);<br>
+            &nbsp;&nbsp;&#125;<br>
+            &nbsp;&nbsp;...<br>
+            &nbsp;&nbsp;moveComponent() &#123;<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;this.index = this.index === 0 ? 1 : 0;<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;this.entry.move(this.<b>componentA</b>.hostView, this.index);<br>
+            &nbsp;&nbsp;&#125;<br>
+            &#125;
+          </code>
+        </li>
+      </ul>
+    </div>
+  </mat-grid-tile>
+
+</mat-grid-list>

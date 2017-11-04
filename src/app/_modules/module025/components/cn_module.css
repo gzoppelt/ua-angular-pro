@@ -1,0 +1,40 @@
+code {
+    color: blue;
+}
+b {
+    color: blue;
+}
+mat-grid-tile {
+    overflow: auto;
+}
+div {
+    padding: 30px;
+}
+li {
+    padding-top: 20px;
+}
+input {
+    font-size: 20px;
+}
+.red {
+    color: red;
+}
+.green {
+    color: darkgreen;
+}
+.tooltip {
+    background: rgba(0, 0, 0, 0.7);
+    color: #fff;
+    line-height: 1;
+    font-size: 14px;
+    padding: 5px 7px;
+    border-radius: 5px;
+    position: absolute;
+    top: 0;
+    left: 100%;
+    white-space: nowrap;
+    display: none;
+}
+.tooltip--active {
+    display: block;
+}

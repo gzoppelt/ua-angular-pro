@@ -1,0 +1,60 @@
+&nbsp;< <a routerLink="/m007">prev</a> <b>|</b> <a routerLink="/home">Home</a> <b>|</b> <a routerLink="/m009">next</a> >
+<h2>008 @ViewChild and #refs</h2>
+<mat-grid-list cols="2">
+
+  <mat-grid-tile>
+    <mat-grid-tile-header>HTML</mat-grid-tile-header>
+
+          <auth-form
+            (submitted)="createUser($event)">
+            <h3>Create Account</h3>
+            <button type="submit">Join us</button>
+          </auth-form>
+
+          <auth-form
+            (submitted)="loginUser($event)">
+            <h3>Login</h3>
+            <auth-remember (checked)="rememberUser($event)"></auth-remember>
+            <auth-remember (checked)="rememberUser($event)"></auth-remember>
+            <auth-remember (checked)="rememberUser($event)"></auth-remember>
+            <button type="submit">Login</button>
+          </auth-form>
+
+  </mat-grid-tile>
+
+  <mat-grid-tile>
+    <mat-grid-tile-header>Whats going on?</mat-grid-tile-header>
+    <div>
+      <ul>
+        <li>
+          In <i>AuthFormComponent</i> do:
+          <ul>
+            <li><i>template: </i>input field for email gets a template-ref <i>#email</i>:<br>
+              <code>&lt;input type="email" name="email" ngModel <b>#email</b>&gt;</code><br>
+            </li>
+
+            <li><code>import &#123; ElementRef &#125; from @angular/core;</code></li>
+
+            <li><code>@ViewChild('email') email: ElementRef;</code></li>
+
+            <li><i>ngAfterViewInit</i>:<br>
+              <code>
+                console.log(this.email);<br>
+              </code>
+            </li>
+            <li>
+              We get 2 logs (one for each form):<br>
+              <code>
+                > ElementRef &#123;nativeElement: input.ng-untoucjed.ng-pristine.ng-valid&#125;<br>
+              </code>
+            </li>
+          </ul>
+        </li>
+        <li>
+          What we all can doe with those <i>ElementRefs</i> is subject to <a routerLink="/m009">009</a>
+        </li>
+      </ul>
+    </div>
+  </mat-grid-tile>
+
+</mat-grid-list>

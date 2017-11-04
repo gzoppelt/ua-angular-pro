@@ -1,0 +1,54 @@
+&nbsp;< <a routerLink="/m018">prev</a> <b>|</b> <a routerLink="/home">Home</a> <b>|</b> <a routerLink="/m020">next</a> >
+<h2>019 Using ngTemplateOutlet with context</h2>
+<mat-grid-list cols="2">
+
+  <mat-grid-tile>
+    <mat-grid-tile-header>HTML</mat-grid-tile-header>
+
+      <ng-container
+        [ngTemplateOutlet]="tmpl"
+        [ngTemplateOutletContext]="ctx"
+      ></ng-container>
+      <ng-template #tmpl let-name let-location="location">
+        {{ name }} : {{ location }}
+      </ng-template>
+
+  </mat-grid-tile>
+
+  <mat-grid-tile>
+    <mat-grid-tile-header>Whats going on?</mat-grid-tile-header>
+    <div>
+      <ul>
+        <li>Template:<br>
+          <code>
+            &lt;ng-container<br>
+            &nbsp;&nbsp;[ngTemplateOutlet]="tmpl"<br>
+            &nbsp;&nbsp;<b>[ngTemplateOutletContext]="ctx"</b><br>
+            &gt;&lt;/ng-container&gt;<br>
+            <br>
+            &lt;ng-template #tmpl let-name let-location="location"&gt;<br>
+            &nbsp;&nbsp;{{'{{'}} name }} : {{'{{'}} location }}<br>
+            &lt;/ng-template&gt;
+          </code></li>
+        <li>ModuleComponent:<br>
+          <code>
+            import &#123; Component &#125; from '@angular/core';<br>
+            <br>
+            @Component(&#123;<br>
+            &nbsp;&nbsp;selector: 'app-module',<br>
+            &nbsp;&nbsp;templateUrl: './cn_module.html',<br>
+            &nbsp;&nbsp;styleUrls: ['./cn_module.css']<br>
+            })<br>
+            export class ModuleComponent &#123;<br>
+            &nbsp;&nbsp;<b>ctx = &#123;<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;$implicit: 'Todd Motto,<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;location: 'England, UK'<br>
+            &nbsp;&nbsp;};</b><br>
+            }<br>
+          </code>
+        </li>
+      </ul>
+    </div>
+  </mat-grid-tile>
+
+</mat-grid-list>

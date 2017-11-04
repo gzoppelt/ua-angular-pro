@@ -1,0 +1,62 @@
+&nbsp;< <a routerLink="/m021">prev</a> <b>|</b> <a routerLink="/home">Home</a> <b>|</b> <a routerLink="/m023">next</a> >
+<h2>022 Creating a custom attribute Directive</h2>
+<mat-grid-list cols="2">
+
+  <mat-grid-tile>
+    <mat-grid-tile-header>HTML</mat-grid-tile-header>
+    <div>
+      <label>
+        Credit Card Number<br><br>
+        <input
+          credit-card
+          name="credit-card"
+          type="text"
+          placeholder="Enter credit card number"
+        >
+      </label>
+    </div>
+  </mat-grid-tile>
+
+  <mat-grid-tile>
+    <mat-grid-tile-header>Whats going on?</mat-grid-tile-header>
+    <div>
+      <ul>
+        <li>
+          used as attribute<br>
+          <code>&lt;input <b>credit-card</b>&gt;</code>
+        </li>
+        <li>
+          bare definition<br>
+          <code>
+            import &#123; Directive, ElementRef } from '@angular/core';<br>
+            <br>
+            @Directive(&#123;<br>
+            &nbsp;&nbsp;selector: '[credit-card]'<br>
+            })<br>
+            export class CreditCardDirective &#123;<br>
+            &nbsp;&nbsp;constructor(private element: ElementRef) &#123;<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;console.log(element);<br>
+            &nbsp;&nbsp;}
+            }
+          </code>
+        </li>
+        <li>
+          not to forget to include into the module declaration<br>
+          <code>
+            import &#123; CreditCardDirective } from './components/di_credit-card.directive';<br>
+            <br>
+            @NgModule(&#123;<br>
+            &nbsp;&nbsp;declarations: [<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;...,<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;CreditCardDirective,<br>
+            &nbsp;&nbsp;],<br>
+            &nbsp;&nbsp;imports: [ ... ],<br>
+            })<br>
+            export class ModuleModule &#123;}
+          </code>
+        </li>
+      </ul>
+    </div>
+  </mat-grid-tile>
+
+</mat-grid-list>

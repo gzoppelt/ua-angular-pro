@@ -1,0 +1,56 @@
+&nbsp;< <a routerLink="/m014">prev</a> <b>|</b> <a routerLink="/home">Home</a> <b>|</b> <a routerLink="/m016">next</a> >
+<h2>015 Dynamic components reordering</h2>
+<mat-grid-list cols="2">
+
+  <mat-grid-tile>
+    <mat-grid-tile-header>HTML</mat-grid-tile-header>
+
+      <button *ngIf="show" (click)="moveComponent()">Move</button><br>
+      <button *ngIf="show" (click)="destroyComponent()">Destroy</button>
+
+      <div #entry></div>
+
+  </mat-grid-tile>
+
+  <mat-grid-tile>
+    <mat-grid-tile-header>Whats going on?</mat-grid-tile-header>
+    <div>
+      <ul>
+        <li><code>&lt;button *nfIf="show" (click)="moveComponent()&gt;Move&lt;/button&gt;"</code></li>
+        <li><code>componentA</code> and <code>componentB</code> are now properties of <i>ModuleComponent</i></li>
+        <li><i>ModuleComponent</i> which is producing <i>AuthFormComponent</i>s looks like this:<br>
+          <code>
+            export class ModuleComponent implements AfterContentInit &#123;<br>
+            &nbsp;&nbsp;componentA: ComponentRef&lt;AuthFormComponent&gt;<br>
+            &nbsp;&nbsp;componentB: ComponentRef&lt;AuthFormComponent&gt;<br>
+            &nbsp;&nbsp;show = true;<br>
+            &nbsp;&nbsp;index = 0;<br>
+            &nbsp;&nbsp;@ViewChild('entry', &#123; read: ViewContainerRef &#125;) entry: ViewContainerRef;<br>
+            &nbsp;&nbsp;constructor(private componentFactoryResolver: ComponentFactoryResolver) &#123;&#125;<br>
+            &nbsp;&nbsp;ngAfterContentInit() &#123;<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;const authFormFactory = <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;this.componentFactoryResolver.resolveComponentFactory(AuthFormComponent);<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;this.componentA  = this.entry.createComponent(authFormFactory);<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;this.componentA.instance.title = 'Create Account';<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;this.componentA.instance.submitted.subscribe(this.loginUser);<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;this.componentB = this.entry.createComponent(authFormFactory<b>, 0</b>); // <b>index added *1)</b><br>
+            &nbsp;&nbsp;&#125;<br>
+            &nbsp;&nbsp;loginUser(user: User) &#123;<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;console.log('Login', user);<br>
+            &nbsp;&nbsp;&#125;<br>
+            &nbsp;&nbsp;destroyComponent() &#123;<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;this.componentA.destroy();<br>
+            &nbsp;&nbsp;&#125;<br>
+            &nbsp;&nbsp;<b>moveComponent() &#123;<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;this.index = this.index === 0 ? 1 : 0;<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;this.entry.move(this.componentB.hostView, this.index);<br> // <b>the new index</b>
+            &nbsp;&nbsp;&#125;<br>
+            &#125;</b>
+          </code>
+        </li>
+        <li><b>1)</b> index = 0 .. first, default index -1: first come first served</li>
+      </ul>
+    </div>
+  </mat-grid-tile>
+
+</mat-grid-list>

@@ -1,0 +1,59 @@
+&nbsp;< <a routerLink="/m016">prev</a> <b>|</b> <a routerLink="/home">Home</a> <b>|</b> <a routerLink="/m018">next</a> >
+<h2>017 Passing context to a dynamic template</h2>
+<mat-grid-list cols="2">
+
+  <mat-grid-tile>
+    <mat-grid-tile-header>HTML</mat-grid-tile-header>
+
+      <button *ngIf="show" (click)="moveComponent()">Move</button><br>
+      <button *ngIf="show" (click)="destroyComponent()">Destroy</button>
+
+      <div #entry></div>
+      <ng-template #tmpl let-name let-location="location">
+        {{ name }} : {{ location }};
+      </ng-template>
+
+  </mat-grid-tile>
+
+  <mat-grid-tile>
+    <mat-grid-tile-header>Whats going on?</mat-grid-tile-header>
+    <div>
+      <ul>
+        <li><code>import &#123; ..., TemplateRef, EmbeddedViewRef, ... &#125;</code></li>
+        <li><code>
+          &lt;div #entry&gt;&lt;/div&gt;<br>
+          <b>&lt;ng-template #tmpl let-name let-location="location"&gt;<br>
+          &nbsp;&nbsp;{{'{{'}} name }}; : {{'{{'}} location }}<br>
+          &lt;/ng-template&gt;</b>
+        </code></li>
+        <li><i>ModuleComponent</i> which is producing <i>AuthFormComponent</i>s looks like this:<br>
+          <code>
+            export class ModuleComponent implements AfterContentInit &#123;<br>
+            &nbsp;&nbsp;componentA: ComponentRef&lt;AuthFormComponent&gt;<br>
+            &nbsp;&nbsp;componentB: EmbeddedViewRef&lt;any&gt;<br>
+            &nbsp;&nbsp;show = true;<br>
+            &nbsp;&nbsp;index = 0;<br>
+            &nbsp;&nbsp;@ViewChild('entry', &#123; read: ViewContainerRef &#125;) entry: ViewContainerRef;<br>
+            &nbsp;&nbsp;@ViewChild('tmpl') tmpl: TemplateRef&lt;any&gt;<br>
+            &nbsp;&nbsp;constructor(private componentFactoryResolver: ComponentFactoryResolver) &#123;&#125;<br>
+            &nbsp;&nbsp;ngAfterContentInit() &#123;<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;const authFormFactory = <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;this.componentFactoryResolver.resolveComponentFactory(AuthFormComponent);<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;this.componentA  = this.entry.createComponent(authFormFactory);<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;this.componentA.instance.title = 'Create Account';<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;this.componentA.instance.submitted.subscribe(this.loginUser);<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;<b>this.componentB = this.entry.createEmbeddedView(this.tmpl, &#123;<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$implicit: 'Todd Motto',<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;location: 'England, UK',<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&#125;)</b>;<br>
+            &nbsp;&nbsp;&#125;<br>
+            &nbsp;&nbsp;...<br>
+            &#125;
+          </code>
+        </li>
+        <li>btw: This is an example how to display template variables in HTML: <code>{{'{{'}} variable }}</code></li>
+      </ul>
+    </div>
+  </mat-grid-tile>
+
+</mat-grid-list>

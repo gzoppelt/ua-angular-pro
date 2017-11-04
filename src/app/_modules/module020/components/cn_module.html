@@ -1,0 +1,63 @@
+&nbsp;< <a routerLink="/m019">prev</a> <b>|</b> <a routerLink="/home">Home</a> <b>|</b> <a routerLink="/m021">next</a> >
+<h2>020 ViewEncapsulation and Shadow DOM</h2>
+<mat-grid-list cols="2">
+
+  <mat-grid-tile>
+    <mat-grid-tile-header>HTML</mat-grid-tile-header>
+    <table>
+      <tr>
+        <th>1</th>
+        <th>2</th>
+        <th>3</th>
+        <th>4</th>
+      </tr>
+      <tr>
+        <th>Emulated<br>(default)</th>
+        <th>Native</th>
+        <th>None</th>
+        <th>None</th>
+      </tr>
+
+      <tr>
+        <td><example-one></example-one></td>
+        <td><example-two></example-two></td>
+        <td><example-three></example-three></td>
+        <td><example-four></example-four></td>
+      </tr>
+    </table>
+  </mat-grid-tile>
+
+  <mat-grid-tile>
+    <mat-grid-tile-header>Whats going on?</mat-grid-tile-header>
+    <div>
+      <ul>
+        <li>
+          Component 1 <i>encapsulation: ViewEncapsulation.Emulated</i> (default)<br>
+          emulates by Angular means how shadow DOM works (not all browsers have shadow DOM yet)
+          <ul>
+            <li>does not effect outside</li>
+            <li>uses globals if there is no own property</li>
+          </ul>
+        </li>
+        <li>
+          Component 2 <i>encapsulation: ViewEncapsulation.Native</i><br>
+          encapsulates styles by using shadow DOM
+          <ul>
+            <li>does not effect outside</li>
+            <li>globals override even if there is an own property</li>
+          </ul>
+        </li>
+        <li>
+          Component 3 <i>encapsulation: ViewEncapsulation.None</i><br>
+          no encapsulation of styles
+          <ul>
+            <li>effects all components</li>
+            <li>overrides earlier outside properties</li>
+            <li>later outside properties override own properties (cascading)</li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </mat-grid-tile>
+
+</mat-grid-list>

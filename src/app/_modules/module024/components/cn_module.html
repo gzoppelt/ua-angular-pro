@@ -1,0 +1,57 @@
+&nbsp;< <a routerLink="/m023">prev</a> <b>|</b> <a routerLink="/home">Home</a> <b>|</b> <a routerLink="/m025">next</a> >
+<h2>024 Understanding @HostBinding</h2>
+<mat-grid-list cols="2">
+
+  <mat-grid-tile>
+    <mat-grid-tile-header>HTML</mat-grid-tile-header>
+    <div>
+      <label>
+        Credit Card Number<br><br>
+        <input
+          credit-card
+          name="credit-card"
+          type="text"
+          placeholder="Enter credit card number"
+        >
+      </label>
+    </div>
+  </mat-grid-tile>
+
+  <mat-grid-tile>
+    <mat-grid-tile-header>Whats going on?</mat-grid-tile-header>
+    <div>
+      <ul>
+        <li>
+          We bind to the  host object <code>&lt;input credit-card&gt;</code> an attribut <i>style.border</i>.
+        </li>
+        <li>
+          Implementation of the <code>credit-card</code> directive<br>
+          <code>
+            import &#123; Directive, HostListener, <b>HostBinding</b> } from '@angular/core';<br>
+            <br>
+            @Directive(&#123;<br>
+            &nbsp;&nbsp;selector: '[credit-card]'<br>
+            })<br>
+            export class CreditCardDirective &#123;<br>
+            &nbsp;&nbsp;<b>@HostBinding('style.border') border: string;</b><br>
+            &nbsp;&nbsp;@HostListener('input', ['$event']) onKeyDown(event: KeyboardEvent) &#123;<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;const input = event.target as HTMLInputElement;<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;let trimmed = input.value.replace(/\s+/g, '');<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;if (trimmed.length > 16) &#123;<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;trimmed = trimmed.substr(0, 16);<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;const numbers = [];<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;for (let i = 0; i < trimmed.length; i += 4) &#123;<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;numbers.push(trimmed.substr(i, 4));<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;input.value = numbers.join(' ');<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;<b>this.border = /^[\d]+$/.test(trimmed) ? '3px solid blue' : '3px solid red';</b><br>
+            &nbsp;&nbsp;}<br>
+            }<br>
+          </code>
+        </li>
+      </ul>
+    </div>
+  </mat-grid-tile>
+
+</mat-grid-list>

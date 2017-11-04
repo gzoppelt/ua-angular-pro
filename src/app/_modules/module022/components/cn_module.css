@@ -1,0 +1,21 @@
+code {
+    color: blue;
+}
+b {
+    color: blue;
+}
+mat-grid-tile {
+    overflow: auto;
+}
+div {
+    padding: 30px;
+}
+li {
+    padding-top: 20px;
+}
+.red {
+    color: red;
+}
+.green {
+    color: darkgreen;
+}

@@ -1,3 +1,4 @@
+&nbsp;< <a routerLink="/m005">prev</a> <b>|</b> <a routerLink="/home">Home</a> <b>|</b> <a routerLink="/m007">next</a> >
 <h2>006 @ViewChild and ngAfterViewInit</h2>
 <mat-grid-list cols="2">
 
@@ -25,8 +26,8 @@
     <mat-grid-tile-header>Whats going on?</mat-grid-tile-header>
     <div>
       <ul>
-        <li>New <code>&lt;auth-message&gt;</code> component which has a property <code>days = 7;</code><br>
-          We will amend <code>days</code> to 15 when the component is projected into <code>&lt;auth-form&gt;</code>
+        <li>New component <code>&lt;auth-message&gt;</code> which has a property <code>days = 7;</code><br>
+          We amend <code>days</code> to 15 when the component is projected into <code>&lt;auth-form&gt;</code>
         </li>
         <li>
           In <i>AuthFormComponent</i> do:
@@ -37,50 +38,28 @@
               define message:<br>
               <code><b>@ViewChild</b>(AuthMessageComponent) message: AuthRememberComponent;</code>
             </li>
-            <li>in <i>ngAfterInit</i> do (forEach comes from the <i>QueryList</i> prototype):<br>
+            <li>in <b><i>ngAfterViewInit</i></b> do:<br>
               <code>
-                if (this.remember) &#123;<br>
-                &nbsp;&nbsp;this.remember.<b>forEach</b>( item => &#123;<br>
-                &nbsp;&nbsp;&nbsp;&nbsp;item.checked.subscribe( checked => this.showMessage = checked );<br>
-                &nbsp;&nbsp;&#125;);<br>
+                if (this.message) &#123;<br>
+                &nbsp;&nbsp;this.message = 15;<br>
                 &#125;<br>
               </code>
+              This fails:<br>
+              <span class="red">
+                Expression has changed after it was checked. Previous value: '7'. Current value: '15'.<br>
+              </span>
+              Angular does not accept change of content after view init.
+            </li>
+            <li>in <b><i>ngAfterContentInit</i></b> do:<br>
+              <code>
+                if (this.message) &#123;<br>
+                &nbsp;&nbsp;this.message = 15;<br>
+                &#125;<br>
+              </code>
+              This is Ok:<br>
+              <span class="green">Angular accepts change of content AfterContentInit but before AfterViewInit.</span><br>
             </li>
           </ul>
-        </li>
-        <br>
-        <strong>The rest of the module stays unchanged:</strong>
-        <li>Projecting the component is straight forward, this is about binding to them.<br>
-          <code>
-            &lt;auth-form (submitted)="loginUser($event)"&gt;<br>
-              &nbsp;&nbsp;&lt;h3&gt;Login&lt;/h3&gt;<br>
-              &nbsp;&nbsp;&lt;auth-remember (checked)="rememberUser($event)"&gt;&lt;auth-remember&gt;<br>
-              &nbsp;&nbsp;&lt;button type="submit"&gt;Join us&lt;/button&gt;<br>
-            &lt;/auth-form&gt;<br>
-          </code>
-        </li>
-        <li>
-          <i>rememberUser</i> keeps an internal  flag updated <code>this.rememberMe = remember;</code><br>
-          which will be submitted together with the login data.
-        </li>
-        <li><i>AuthRemeberComponent</i> emits the <i>checked</i> event to be used in the <i>AuthFormComponent</i><br>
-          <code>
-            @Component(&#123;<br>
-            &nbsp;&nbsp;selector: 'auth-remember',<br>
-            &nbsp;&nbsp;template: `<br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&lt;label&gt;<br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;input type="checkbox" (change)="onChange($event.target.checked)"/&gt;<br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Keep me logged in<br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&lt;/label&gt;<br>
-            &nbsp;&nbsp;`<br>
-            &#125;)<br>
-            export class AuthRememberComponent &#123;<br>
-            &nbsp;&nbsp;&#64;Output() checked = new EventEmitter&lt;boolean&gt;();<br>
-            &nbsp;&nbsp;onChange(value: boolean) &#123;<br>
-            &nbsp;&nbsp;&nbsp;&nbsp;this.checked.emit(value);<br>
-            &nbsp;&nbsp;&#125;<br>
-            &#125;<br>
-          </code>
         </li>
       </ul>
     </div>

@@ -8,6 +8,8 @@ import { User } from '../_modules/auth-form/components/md_user';
   styleUrls: ['./cn_module.css']
 })
 export class ModuleComponent {
+  prev = 'm005';
+  next = 'm007';
 
   rememberMe = false;
 

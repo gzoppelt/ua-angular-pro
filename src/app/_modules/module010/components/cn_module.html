@@ -1,0 +1,64 @@
+&nbsp;< <a routerLink="/m009">prev</a> <b>|</b> <a routerLink="/home">Home</a> <b>|</b> <a routerLink="/m011">next</a> >
+<h2>010 Using the platform agnostic Renderer</h2>
+<mat-grid-list cols="2">
+
+  <mat-grid-tile>
+    <mat-grid-tile-header>HTML</mat-grid-tile-header>
+
+          <auth-form
+            (submitted)="loginUser($event)">
+            <h3>Login</h3>
+            <auth-remember (checked)="rememberUser($event)"></auth-remember>
+            <button type="submit">Login</button>
+          </auth-form>
+
+  </mat-grid-tile>
+
+  <mat-grid-tile>
+    <mat-grid-tile-header>Whats going on?</mat-grid-tile-header>
+    <div>
+      <ul>
+        <li>
+          In <i>AuthFormComponent</i> do:
+          <ul>
+            <li><i>template: </i>input field for email gets a template-ref <i>#email</i> and <i>id="email-id"</i><br>
+              <code>&lt;input type="email" name="email" ngModel <b>#email id="email-id"</b>&gt;</code><br>
+            </li>
+
+            <li><i>styles: </i>class email gets a red border<br>
+              <code>.email &#123; border-color: red; &#125;</code><br>
+            </li>
+
+            <li><code>import &#123; ElementRef, Renderer2 &#125; from @angular/core;</code></li>
+
+            <li><code>@ViewChild('email') email: ElementRef;</code></li>
+
+            <li><code>constructor(private renderer2: Renderer2) &#123;&#125;</code></li>
+
+            <li><i>ngAfterViewInit</i>:<br>
+              <code>
+                // this.email.nativeElement.setAttribute('placeholder', 'Enter email address');<br>
+                <b>this.renderer2.setAttribute(this.email.nativeElement, 'placeholder', 'Enter email');</b><br>
+                <br>
+                // this.email.nativeElement.classList.add('email');<br>
+                <b>this.renderer2.addClass(this.email.nativeElement, 'email');</b><br>
+                <br>
+                // this.email.nativeElement.focus();<br>
+                <b>this.renderer2.selectRootElement('#email-id').focus();</b><br>
+                <small></small>
+              </code>
+            </li>
+          </ul>
+        </li>
+        <li>
+          Renderer was replaced by Renderer2 and invokeElementMethod() was lost in the way.<br>
+          It was once:<br>
+          <code>this.renderer.invokeElementMethod(this.email.nativeElement, 'focus');</code><br>
+          The workaround is with <i>selectRootElement()</i> which requires an <i>id</i> attribute.
+        </li>
+        <li>This way the manipulations are not only valid for the browser but for any supported platform.</li>
+      </ul>
+    </div>
+  </mat-grid-tile>
+
+</mat-grid-list>

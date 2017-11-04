@@ -1,0 +1,43 @@
+&nbsp;< <a routerLink="/m017">prev</a> <b>|</b> <a routerLink="/home">Home</a> <b>|</b> <a routerLink="/m019">next</a> >
+<h2>018 Dynamic template rendering with ngTemplateOutlet</h2>
+<mat-grid-list cols="2">
+
+  <mat-grid-tile>
+    <mat-grid-tile-header>HTML</mat-grid-tile-header>
+
+      <ng-container [ngTemplateOutlet]="tmpl"></ng-container>
+      <ng-template #tmpl>
+        Todd Motto : England, UK
+      </ng-template>
+
+  </mat-grid-tile>
+
+  <mat-grid-tile>
+    <mat-grid-tile-header>Whats going on?</mat-grid-tile-header>
+    <div>
+      <ul>
+        <li>Template:<br>
+          <code><b>
+            &lt;ng-container [ngTemplateOutlet]="tmpl"&gt;&lt;/ng-container&gt;<br>
+            <br>
+            &lt;ng-template #tmpl&gt;<br>
+            &nbsp;&nbsp;Todd Motto : England, UK<br>
+            &lt;/ng-template&gt;</b>
+          </code></li>
+        <li>ModuleComponent:<br>
+          <code>
+            import &#123; Component &#125; from '@angular/core';<br>
+            <br>
+            @Component(&#123;<br>
+            &nbsp;&nbsp;selector: 'app-module',<br>
+            &nbsp;&nbsp;templateUrl: './cn_module.html',<br>
+            &nbsp;&nbsp;styleUrls: ['./cn_module.css']<br>
+            })<br>
+            export class ModuleComponent &#123;}<br>
+          </code>
+        </li>
+      </ul>
+    </div>
+  </mat-grid-tile>
+
+</mat-grid-list>
